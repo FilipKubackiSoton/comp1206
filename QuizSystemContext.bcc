@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.scContextFile org.eventb.core.accurate="true" org.eventb.core.configuration="org.eventb.core.fwd;de.prob.symbolic.ctxBase">
+<org.eventb.core.scCarrierSet name="ANSWER" org.eventb.core.source="/Coursework/QuizSystemContext.buc|org.eventb.core.contextFile#QuizSystemContext|org.eventb.core.carrierSet#_yOLKQJw0Eeq_bL0hgIYZyg" org.eventb.core.type="ℙ(ANSWER)"/>
+<org.eventb.core.scCarrierSet name="PASSWORD" org.eventb.core.source="/Coursework/QuizSystemContext.buc|org.eventb.core.contextFile#QuizSystemContext|org.eventb.core.carrierSet#_riOrIJw-Eeq_bL0hgIYZyg" org.eventb.core.type="ℙ(PASSWORD)"/>
+<org.eventb.core.scCarrierSet name="QUESTION" org.eventb.core.source="/Coursework/QuizSystemContext.buc|org.eventb.core.contextFile#QuizSystemContext|org.eventb.core.carrierSet#_3tzIUJy7Eeqs0qALQ40MxQ" org.eventb.core.type="ℙ(QUESTION)"/>
+<org.eventb.core.scCarrierSet name="QUIZ" org.eventb.core.source="/Coursework/QuizSystemContext.buc|org.eventb.core.contextFile#QuizSystemContext|org.eventb.core.carrierSet#_yOKjMJw0Eeq_bL0hgIYZyg" org.eventb.core.type="ℙ(QUIZ)"/>
+<org.eventb.core.scCarrierSet name="USER" org.eventb.core.source="/Coursework/QuizSystemContext.buc|org.eventb.core.contextFile#QuizSystemContext|org.eventb.core.carrierSet#_o59coJwjEeq_bL0hgIYZyg" org.eventb.core.type="ℙ(USER)"/>
+</org.eventb.core.scContextFile>
