@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.machineFile org.eventb.core.configuration="org.eventb.core.fwd" org.eventb.core.generated="false" org.eventb.texttools.text_lastmodified="1590415042665" org.eventb.texttools.text_representation="machine QuizMachine sees QuizContext&#10;&#10;variables&#10;&#9;&#9;&#9;questionToAnswer&#10;&#9;&#9;&#9;questionToCorrectAnswer&#10;&#9;&#9;&#9;quizes&#10;&#9;&#9;&#9;correctAnswers&#10;&#9;&#9;&#9;answers&#10;&#9;&#9;&#9;questions&#10;&#9;&#9;&#9;registeredUser&#10;&#9;&#9;&#9;loggedIn&#10;&#9;&#9;&#9;loggedOut&#10;&#10;invariants&#10;&#9;@inv1 correctAnswers ⊂ ANSWERS&#10;&#9;@inv2 questions ⊆ QUESTIONS&#10;&#9;@inv3 card(questions) = card(correctAnswers)&#10;&#9;@inv4 answers ⊆ ANSWERS ∖ correctAnswers&#10;&#9;@inv5 questionToAnswer ∈ questions → ℙ(answers)&#10;&#9;@inv6 questionToCorrectAnswer ∈ questions → correctAnswers&#10;&#9;@inv7 quizes ⊆  QUIZES&#10;&#9;@inv8 registeredUser ⊆ USER // set of people registered to use the building&#10;  &#9;@inv9 loggedIn ⊆ registeredUser// set of people inside the building (must be registered)&#10;  &#9;@inv10 loggedOut ⊆ registeredUser // set of registered users currently outside&#10;  &#9;@inv11 loggedIn ∩ loggedOut = ∅ // no users simultaneously inside and outside&#10;  &#9;@inv12 registeredUser ⊆  loggedIn ∪ loggedOut // registered users must be in or out&#10;&#10;events&#10;  event INITIALISATION&#10;  then&#10;  &#9;@act1 questionToAnswer ≔ ∅&#10;  &#9;@act2 questionToCorrectAnswer ≔ ∅&#10;  &#9;@act3 quizes ≔∅&#10;  &#9;@act4 correctAnswers ≔ ∅&#10;&#9;@act5 answers ≔ ∅&#10;&#9;@act6 questions ≔ ∅&#10;&#9;@act7 registeredUser ≔  ∅&#10;&#9;@act8 loggedIn ≔  ∅&#10;&#9;@act9 loggedOut ≔  ∅&#10;  end&#10;&#10;  event RegisterUser // Register a new user&#10;    any u&#10;    where&#10;      @grd1 u ∈ USER&#10;      @grd2 u ∉ registeredUser&#10;    then&#10;      @act1 registeredUser ≔ registeredUser ∪ {u}&#10;      @act2 loggedOut ≔ loggedOut ∪ {u}&#10;  end&#10;&#10;  event LogIn&#10;    any u&#10;    where&#10;      @grd1 u ∈ loggedOut&#10;    then&#10;      @act1 loggedIn ≔ loggedIn ∪ {u}&#10;      @act2 loggedOut ≔ loggedOut ∖ {u}&#10;  end&#10;&#10;  event LogOut // User u enters the building&#10;    any u&#10;    where&#10;      @grd1 u ∈ loggedIn&#10;    then&#10;      @act1 loggedOut ≔ loggedOut ∪ {u}&#10;      @act2 loggedIn ≔ loggedIn ∖ {u}&#10;  end&#10;&#10;  event addQuestion&#10;  any q&#10;  where&#10;  &#9;@grd1 q ∈ questions ∖  {q}&#10;  then&#10;  &#9;@act1 questions ≔ questions ∪  {q}&#10;  end&#10;&#10;event addAnswersToQuestion&#10;  any q ca a&#10;  where&#10;  &#9;@grd1 q ∈ questions&#10;  &#9;@grd2 ca ∈ correctAnswers&#10;  &#9;@grd3 a ⊆  answers&#10;  &#9;@grd4 card(a) ≤3&#10;  &#9;@grd5 card(a)≥1&#10;  then&#10;  &#9;@act1 questionToAnswer ≔ questionToAnswer ∪  {q↦ a}&#10;  &#9;@act2 questionToCorrectAnswer ≔ questionToCorrectAnswer ∪  {q↦ca}&#10;  end&#10;&#10;  event CreateQuiz&#10;  any q&#10;  where&#10;  &#9;@grd1 q ∈ QUIZES ∖ quizes&#10;  then&#10;  &#9;@act1 quizes ≔ quizes ∪  {q}&#10;  end&#10;&#10;  event RemoveQuiz&#10;  any q&#10;  where&#10;  &#9;@grd1 q ∈  quizes&#10;  then&#10;  &#9;@act1 quizes ≔ quizes ∖ {q}&#10;  end&#10;&#10;  event AddAnswers&#10;  any a ca&#10;  where&#10;  &#9;@grd1 ca ∈ ANSWERS&#10;  &#9;@grd2 a ⊆  ANSWERS&#10;  &#9;@grd3 card(a) ≤3&#10;  &#9;@grd4 card(a) ≥1&#10;  then&#10;  &#9;@act1 correctAnswers ≔ correctAnswers ∪  {ca}&#10;  &#9;@act2 answers ≔ answers ∪  a&#10;  end&#10;&#10;  event RemoveQuestion&#10;  any q&#10;  where&#10;  &#9;@grd1 q ∈ questions&#10;  then&#10;  &#9;@act1 questions ≔  questions ∖ {q}&#10;  end&#10;&#10;  event UpdateQuestion&#10;  any q ca a nq nca na&#10;  where&#10;  &#9;@grd1 q ∈ questions&#10;  &#9;@grd2 ca ∈ correctAnswers&#10;  &#9;@grd3 a ⊆  answers&#10;  &#9;@grd4 card(a) ≤3&#10;  &#9;@grd5 card(a)≥1&#10;  &#9;@grd6 nq ∈ questions&#10;  &#9;@grd7 nca ∈ correctAnswers&#10;  &#9;@grd8 na ⊆  answers&#10;  &#9;@grd9 card(na) ≤3&#10;  &#9;@grd10 card(na)≥1&#10;  then&#10;  &#9;@act1 questionToAnswer ≔( questionToAnswer ∖  {q↦ a}) ∪  {nq↦na}&#10;  &#9;@act2 questionToCorrectAnswer ≔ (questionToCorrectAnswer ∖ {q↦ca}) ∪ {nq↦nca}&#10;  end&#10;&#10;&#10;end&#10;" version="5">
+<org.eventb.core.seesContext name="_9701QJ6GEeqzMdFp6lh4bQ" org.eventb.core.target="QuizContext"/>
+<org.eventb.core.event name="'" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="INITIALISATION">
+<org.eventb.core.action name="_972qcZ6GEeqzMdFp6lh4bQ" org.eventb.core.assignment="questionToAnswer ≔ ∅" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+<org.eventb.core.action name="_Xor_kJ6IEeqzMdFp6lh4bQ" org.eventb.core.assignment="questionToCorrectAnswer ≔ ∅" org.eventb.core.generated="false" org.eventb.core.label="act2"/>
+<org.eventb.core.action name="_b1COwJ6JEeqzMdFp6lh4bQ" org.eventb.core.assignment="quizes ≔∅" org.eventb.core.generated="false" org.eventb.core.label="act3"/>
+<org.eventb.core.action name="_FY8mwJ6KEeqzMdFp6lh4bQ" org.eventb.core.assignment="correctAnswers ≔ ∅" org.eventb.core.generated="false" org.eventb.core.label="act4"/>
+<org.eventb.core.action name="_FY8mwZ6KEeqzMdFp6lh4bQ" org.eventb.core.assignment="answers ≔ ∅" org.eventb.core.generated="false" org.eventb.core.label="act5"/>
+<org.eventb.core.action name="_F5yC8J6KEeqzMdFp6lh4bQ" org.eventb.core.assignment="questions ≔ ∅" org.eventb.core.generated="false" org.eventb.core.label="act6"/>
+<org.eventb.core.action name="_qyU7MJ6OEeqzMdFp6lh4bQ" org.eventb.core.assignment="registeredUser ≔  ∅" org.eventb.core.generated="false" org.eventb.core.label="act7"/>
+<org.eventb.core.action name="_qyU7MZ6OEeqzMdFp6lh4bQ" org.eventb.core.assignment="loggedIn ≔  ∅" org.eventb.core.generated="false" org.eventb.core.label="act8"/>
+<org.eventb.core.action name="_qyU7Mp6OEeqzMdFp6lh4bQ" org.eventb.core.assignment="loggedOut ≔  ∅" org.eventb.core.generated="false" org.eventb.core.label="act9"/>
+</org.eventb.core.event>
+<org.eventb.core.event name="_qyU7M56OEeqzMdFp6lh4bQ" org.eventb.core.comment="Register a new user" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="RegisterUser">
+<org.eventb.core.parameter name="_qyU7NJ6OEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="u"/>
+<org.eventb.core.guard name="_972DYZ6GEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="u ∈ USER"/>
+<org.eventb.core.guard name="_972qcJ6GEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd2" org.eventb.core.predicate="u ∉ registeredUser"/>
+<org.eventb.core.action name="_XosmoZ6IEeqzMdFp6lh4bQ" org.eventb.core.assignment="registeredUser ≔ registeredUser ∪ {u}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+<org.eventb.core.action name="_XovC4Z6IEeqzMdFp6lh4bQ" org.eventb.core.assignment="loggedOut ≔ loggedOut ∪ {u}" org.eventb.core.generated="false" org.eventb.core.label="act2"/>
+</org.eventb.core.event>
+<org.eventb.core.event name="_ySHGgJ6OEeqzMdFp6lh4bQ" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="LogIn">
+<org.eventb.core.parameter name="_qyXXcJ6OEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="u"/>
+<org.eventb.core.guard name="_Xoub0Z6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="u ∈ loggedOut"/>
+<org.eventb.core.action name="_XovC4J6IEeqzMdFp6lh4bQ" org.eventb.core.assignment="loggedIn ≔ loggedIn ∪ {u}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+<org.eventb.core.action name="_WZzqQJ6LEeqzMdFp6lh4bQ" org.eventb.core.assignment="loggedOut ≔ loggedOut ∖ {u}" org.eventb.core.generated="false" org.eventb.core.label="act2"/>
+</org.eventb.core.event>
+<org.eventb.core.event name="_qHk4kJ6PEeqzMdFp6lh4bQ" org.eventb.core.comment="User u enters the building" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="LogOut">
+<org.eventb.core.parameter name="_qHk4kZ6PEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="u"/>
+<org.eventb.core.guard name="_b1FSEZ6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="u ∈ loggedIn"/>
+<org.eventb.core.action name="_b1HHQJ6JEeqzMdFp6lh4bQ" org.eventb.core.assignment="loggedOut ≔ loggedOut ∪ {u}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+<org.eventb.core.action name="_C3WFW56NEeqzMdFp6lh4bQ" org.eventb.core.assignment="loggedIn ≔ loggedIn ∖ {u}" org.eventb.core.generated="false" org.eventb.core.label="act2"/>
+</org.eventb.core.event>
+<org.eventb.core.event name="_971cUJ6GEeqzMdFp6lh4bQ" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="addQuestion">
+<org.eventb.core.parameter name="_XosmoJ6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="q"/>
+<org.eventb.core.guard name="_b1GgMp6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="q ∈ questions ∖  {q}"/>
+<org.eventb.core.action name="_b1HuUZ6JEeqzMdFp6lh4bQ" org.eventb.core.assignment="questions ≔ questions ∪  {q}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+</org.eventb.core.event>
+<org.eventb.core.variable name="_XotNsJ6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="questionToAnswer"/>
+<org.eventb.core.variable name="_XotNsZ6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="questionToCorrectAnswer"/>
+<org.eventb.core.invariant name="_XotNsp6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="inv1" org.eventb.core.predicate="correctAnswers ⊂ ANSWERS"/>
+<org.eventb.core.invariant name="_XotNs56IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="inv2" org.eventb.core.predicate="questions ⊆ QUESTIONS"/>
+<org.eventb.core.variable name="_b1F5IJ6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="quizes"/>
+<org.eventb.core.event name="_WZsVgJ6LEeqzMdFp6lh4bQ" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="addAnswersToQuestion">
+<org.eventb.core.parameter name="_Xot0wZ6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="q"/>
+<org.eventb.core.parameter name="_Xot0wp6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="ca"/>
+<org.eventb.core.parameter name="_Xoub0J6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="a"/>
+<org.eventb.core.guard name="_WZxOAp6LEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="q ∈ questions"/>
+<org.eventb.core.guard name="_WZxOA56LEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd2" org.eventb.core.predicate="ca ∈ correctAnswers"/>
+<org.eventb.core.guard name="_Xoub0p6IEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd3" org.eventb.core.predicate="a ⊆  answers"/>
+<org.eventb.core.guard name="_b1FSEJ6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd4" org.eventb.core.predicate="card(a) ≤3"/>
+<org.eventb.core.guard name="_WZuxwJ6LEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd5" org.eventb.core.predicate="card(a)≥1"/>
+<org.eventb.core.action name="_WZxOBp6LEeqzMdFp6lh4bQ" org.eventb.core.assignment="questionToAnswer ≔ questionToAnswer ∪  {q↦ a}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+<org.eventb.core.action name="_qyesMJ6OEeqzMdFp6lh4bQ" org.eventb.core.assignment="questionToCorrectAnswer ≔ questionToCorrectAnswer ∪  {q↦ca}" org.eventb.core.generated="false" org.eventb.core.label="act2"/>
+</org.eventb.core.event>
+<org.eventb.core.event name="_b1GgMJ6JEeqzMdFp6lh4bQ" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="CreateQuiz">
+<org.eventb.core.parameter name="_b1GgMZ6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="q"/>
+<org.eventb.core.guard name="_C3U3MJ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="q ∈ QUIZES ∖ quizes"/>
+<org.eventb.core.action name="_C3U3MZ6NEeqzMdFp6lh4bQ" org.eventb.core.assignment="quizes ≔ quizes ∪  {q}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+</org.eventb.core.event>
+<org.eventb.core.event name="_b1HHQZ6JEeqzMdFp6lh4bQ" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="RemoveQuiz">
+<org.eventb.core.parameter name="_WZuxwZ6LEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="q"/>
+<org.eventb.core.guard name="_C3WFUJ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="q ∈  quizes"/>
+<org.eventb.core.action name="_C3WFWp6NEeqzMdFp6lh4bQ" org.eventb.core.assignment="quizes ≔ quizes ∖ {q}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+</org.eventb.core.event>
+<org.eventb.core.variable name="_xoPcYJ6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="correctAnswers"/>
+<org.eventb.core.variable name="_xoPcYZ6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="answers"/>
+<org.eventb.core.variable name="_xoPcYp6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="questions"/>
+<org.eventb.core.invariant name="__4pKcJ6KEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="inv3" org.eventb.core.predicate="card(questions) = card(correctAnswers)"/>
+<org.eventb.core.invariant name="_xoR4oJ6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="inv4" org.eventb.core.predicate="answers ⊆ ANSWERS ∖ correctAnswers"/>
+<org.eventb.core.invariant name="_xoR4oZ6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="inv5" org.eventb.core.predicate="questionToAnswer ∈ questions → ℙ(answers)"/>
+<org.eventb.core.invariant name="_xoR4op6JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="inv6" org.eventb.core.predicate="questionToCorrectAnswer ∈ questions → correctAnswers"/>
+<org.eventb.core.invariant name="_xoR4o56JEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="inv7" org.eventb.core.predicate="quizes ⊆  QUIZES"/>
+<org.eventb.core.event name="__4pKcZ6KEeqzMdFp6lh4bQ" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="AddAnswers">
+<org.eventb.core.parameter name="_WZxOAJ6LEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="a"/>
+<org.eventb.core.parameter name="_WZxOAZ6LEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="ca"/>
+<org.eventb.core.guard name="_qyesMZ6OEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="ca ∈ ANSWERS"/>
+<org.eventb.core.guard name="_C3WFUZ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd2" org.eventb.core.predicate="a ⊆  ANSWERS"/>
+<org.eventb.core.guard name="_WZxOBJ6LEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd3" org.eventb.core.predicate="card(a) ≤3"/>
+<org.eventb.core.guard name="_WZxOBZ6LEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd4" org.eventb.core.predicate="card(a) ≥1"/>
+<org.eventb.core.action name="_qyesMp6OEeqzMdFp6lh4bQ" org.eventb.core.assignment="correctAnswers ≔ correctAnswers ∪  {ca}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+<org.eventb.core.action name="_qyhIcZ6OEeqzMdFp6lh4bQ" org.eventb.core.assignment="answers ≔ answers ∪  a" org.eventb.core.generated="false" org.eventb.core.label="act2"/>
+</org.eventb.core.event>
+<org.eventb.core.event name="_C3UQIJ6NEeqzMdFp6lh4bQ" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="RemoveQuestion">
+<org.eventb.core.parameter name="_C3UQIZ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="q"/>
+<org.eventb.core.guard name="_qyesM56OEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="q ∈ questions"/>
+<org.eventb.core.action name="_qyhIcJ6OEeqzMdFp6lh4bQ" org.eventb.core.assignment="questions ≔  questions ∖ {q}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+</org.eventb.core.event>
+<org.eventb.core.event name="_C3U3Mp6NEeqzMdFp6lh4bQ" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.generated="false" org.eventb.core.label="UpdateQuestion">
+<org.eventb.core.parameter name="_C3VeQJ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="q"/>
+<org.eventb.core.parameter name="_C3VeQZ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="ca"/>
+<org.eventb.core.parameter name="_C3VeQp6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="a"/>
+<org.eventb.core.parameter name="_C3VeQ56NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="nq"/>
+<org.eventb.core.parameter name="_C3VeRJ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="nca"/>
+<org.eventb.core.parameter name="_C3VeRZ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="na"/>
+<org.eventb.core.guard name="_qHupkJ6PEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd1" org.eventb.core.predicate="q ∈ questions"/>
+<org.eventb.core.guard name="_qyesNJ6OEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd2" org.eventb.core.predicate="ca ∈ correctAnswers"/>
+<org.eventb.core.guard name="_C3WFUp6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd3" org.eventb.core.predicate="a ⊆  answers"/>
+<org.eventb.core.guard name="_C3WFU56NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd4" org.eventb.core.predicate="card(a) ≤3"/>
+<org.eventb.core.guard name="_C3WFVJ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd5" org.eventb.core.predicate="card(a)≥1"/>
+<org.eventb.core.guard name="_G7DLUJ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd6" org.eventb.core.predicate="nq ∈ questions"/>
+<org.eventb.core.guard name="_G7DLUZ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd7" org.eventb.core.predicate="nca ∈ correctAnswers"/>
+<org.eventb.core.guard name="_G7DLUp6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd8" org.eventb.core.predicate="na ⊆  answers"/>
+<org.eventb.core.guard name="_G7DLU56NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd9" org.eventb.core.predicate="card(na) ≤3"/>
+<org.eventb.core.guard name="_G7DLVJ6NEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.label="grd10" org.eventb.core.predicate="card(na)≥1"/>
+<org.eventb.core.action name="_qHxF0J6PEeqzMdFp6lh4bQ" org.eventb.core.assignment="questionToAnswer ≔( questionToAnswer ∖  {q↦ a}) ∪  {nq↦na}" org.eventb.core.generated="false" org.eventb.core.label="act1"/>
+<org.eventb.core.action name="_qHxF0Z6PEeqzMdFp6lh4bQ" org.eventb.core.assignment="questionToCorrectAnswer ≔ (questionToCorrectAnswer ∖ {q↦ca}) ∪ {nq↦nca}" org.eventb.core.generated="false" org.eventb.core.label="act2"/>
+</org.eventb.core.event>
+<org.eventb.core.variable name="_qyhIcp6OEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="registeredUser"/>
+<org.eventb.core.variable name="_qyhIc56OEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="loggedIn"/>
+<org.eventb.core.variable name="_qyhIdJ6OEeqzMdFp6lh4bQ" org.eventb.core.generated="false" org.eventb.core.identifier="loggedOut"/>
+<org.eventb.core.invariant name="_qyhIdZ6OEeqzMdFp6lh4bQ" org.eventb.core.comment="set of people registered to use the building" org.eventb.core.generated="false" org.eventb.core.label="inv8" org.eventb.core.predicate="registeredUser ⊆ USER"/>
+<org.eventb.core.invariant name="_qyjksJ6OEeqzMdFp6lh4bQ" org.eventb.core.comment="set of people inside the building (must be registered)" org.eventb.core.generated="false" org.eventb.core.label="inv9" org.eventb.core.predicate="loggedIn ⊆ registeredUser"/>
+<org.eventb.core.invariant name="_qyjksZ6OEeqzMdFp6lh4bQ" org.eventb.core.comment="set of registered users currently outside" org.eventb.core.generated="false" org.eventb.core.label="inv10" org.eventb.core.predicate="loggedOut ⊆ registeredUser"/>
+<org.eventb.core.invariant name="_qykLwJ6OEeqzMdFp6lh4bQ" org.eventb.core.comment="no users simultaneously inside and outside" org.eventb.core.generated="false" org.eventb.core.label="inv11" org.eventb.core.predicate="loggedIn ∩ loggedOut = ∅"/>
+<org.eventb.core.invariant name="_qykLwZ6OEeqzMdFp6lh4bQ" org.eventb.core.comment="registered users must be in or out" org.eventb.core.generated="false" org.eventb.core.label="inv12" org.eventb.core.predicate="registeredUser ⊆  loggedIn ∪ loggedOut"/>
+</org.eventb.core.machineFile>

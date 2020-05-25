@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<org.eventb.core.contextFile org.eventb.core.configuration="org.eventb.core.fwd;de.prob.symbolic.ctxBase" org.eventb.core.generated="false" org.eventb.texttools.text_lastmodified="1590242526102" org.eventb.texttools.text_representation="context QuizSystemContext&#10;sets USER PASSWORD QUIZ QUESTION ANSWER&#10;end&#10;" version="3">
-<org.eventb.core.carrierSet name="__EOdUJz9Eeqppce1QDssUw" org.eventb.core.generated="false" org.eventb.core.identifier="USER"/>
-<org.eventb.core.carrierSet name="__EPEYJz9Eeqppce1QDssUw" org.eventb.core.generated="false" org.eventb.core.identifier="PASSWORD"/>
-<org.eventb.core.carrierSet name="__EPEYZz9Eeqppce1QDssUw" org.eventb.core.generated="false" org.eventb.core.identifier="QUIZ"/>
-<org.eventb.core.carrierSet name="__EPrcJz9Eeqppce1QDssUw" org.eventb.core.generated="false" org.eventb.core.identifier="QUESTION"/>
-<org.eventb.core.carrierSet name="__EPrcZz9Eeqppce1QDssUw" org.eventb.core.generated="false" org.eventb.core.identifier="ANSWER"/>
-</org.eventb.core.contextFile>
